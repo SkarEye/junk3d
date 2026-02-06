@@ -1,9 +1,9 @@
-{"id":"1","title":"Create repo skeleton","description":"Create folders and empty files","status":"todo","assignee":"SkarEye","labels":["setup","structure"],"created_at":"2026-02-06T14:47:48.528376338+01:00"}
+{"id":"1","title":"Create repo skeleton","description":"Create folders and empty files","status":"doing","assignee":"SkarEye","labels":["setup","structure"],"created_at":"2026-02-06T14:47:48.528376338+01:00"}
 {"id":"2","title":"Write Makefile stub","description":"Basic compile rules with mlx and libft linkage","status":"todo","labels":["build","makefile"],"created_at":"2026-02-06T14:49:02.900930165+01:00"}
 {"id":"3","title":"Open MLX window","description":"minimal mlx_init and mlx_new_window hooks","status":"todo","labels":["mlx","init"],"created_at":"2026-02-06T14:50:05.409551447+01:00"}
-{"id":"4","title":"Draw pixel function","description":"Implement a put_pixel(x, y, color) wrapper","status":"todo","labels":["graphics","utils"],"created_at":"2026-02-06T14:50:48.747451419+01:00"}
+{"id":"4","title":"Draw pixel function","description":"Implement a put_pixel(x, y, color) wrapper","status":"doing","assignee":"SkarEye","labels":["graphics","utils"],"created_at":"2026-02-06T14:50:48.747451419+01:00"}
 {"id":"5","title":"Screen test","description":"Clear screen with solid color","status":"todo","labels":["rendering","test"],"created_at":"2026-02-06T14:51:21.42836234+01:00"}
-{"id":"6","title":"Parse file path argument","description":"Read .cub from argv, open, error on fail","status":"todo","labels":["parsing","cli"],"created_at":"2026-02-06T14:51:51.889069539+01:00"}
+{"id":"6","title":"Parse file path argument","description":"Read .cub from argv, open, error on fail","status":"doing","assignee":"SkarEye","labels":["parsing","cli"],"created_at":"2026-02-06T14:51:51.889069539+01:00"}
 {"id":"7","title":"Read file","description":"Load entire file into memory (mmap suggested)","status":"todo","labels":["file-io","parsing"],"created_at":"2026-02-06T14:52:30.751345093+01:00"}
 {"id":"8","title":"File tokenizer","description":"Implement a small tokenizer to process the file","status":"todo","labels":["utils","parsing"],"created_at":"2026-02-06T14:53:07.577948296+01:00"}
 {"id":"9","title":"Define basic structures","description":"Create basic game logic structures","status":"todo","labels":["structures","headers"],"created_at":"2026-02-06T14:54:45.303059675+01:00"}
