@@ -5,54 +5,31 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mattcarniel <mattcarniel@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/09 16:51:24 by mattcarniel       #+#    #+#             */
-/*   Updated: 2026/02/09 18:16:59 by mattcarniel      ###   ########.fr       */
+/*   Created: 2026/02/16 17:10:35 by mattcarniel       #+#    #+#             */
+/*   Updated: 2026/02/16 17:40:53 by mattcarniel      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdbool.h>
-#include <string.h>
-
+#include "../game.h"
 #include "mapping.h"
 
-typedef struct s_params
-{
-	const char	*north_wall;
-	const char	*south_wall;
-	const char	*west_wall;
-	const char	*east_wall;
-	const char	*floor_color;
-	const char	*ceiling_color;
-}				t_params;
+#include "../utils/error.h"
 
-static char	*get_address(const char *data, size_t size, const char *key)
-{
-	char	*ret;
-
-	ret = memmem(data, size, key, strlen(key) + 1);
-	if (!ret)
-		return (NULL);
-	if (ret == data && ret[-1] != '\n')
-		return (NULL);
-	return (ret + strlen(key));
-}
-
-t_params	validate_params(t_file *file)
+int	validate_map(t_game *game, const char *filename)
 {
 	t_params	p;
 
-	if (!file || !file->data || file->size <= 0)
-		return ((t_params){0}); //error
-	p.north_wall = get_address(file->data, file->size, "NO ");
-	p.south_wall = get_address(file->data, file->size, "SO ");
-	p.west_wall = get_address(file->data, file->size, "WE ");
-	p.east_wall = get_address(file->data, file->size, "EA ");
-	p.floor_color = get_address(file->data, file->size, "F ");
-	p.ceiling_color = get_address(file->data, file->size, "C ");
-	if (!p.north_wall || !p.south_wall || !p.west_wall || !p.east_wall
-		|| !p.floor_color || !p.ceiling_color)
-		return ((t_params){0}); //error
-	
-	return (p);
+	if (!game)
+		return (1); //print error ?
+	if (!is_valid_name(filename))
+		return (print_error(loc(F, L), ERR_INVALID_NAME, 1));
+	game->file = map_file(filename);
+	if (game->file.error)
+		return (game->file.error);
+	game->params = get_params(&game->file);
+	if (game->params.error)
+		return (game->params.error);
+	// check if is playable, players ?
+	{}
+	return (0);
 }
-

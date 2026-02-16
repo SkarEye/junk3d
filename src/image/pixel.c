@@ -6,7 +6,7 @@
 /*   By: mattcarniel <mattcarniel@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/06 15:01:42 by mattcarniel       #+#    #+#             */
-/*   Updated: 2026/02/09 18:17:05 by mattcarniel      ###   ########.fr       */
+/*   Updated: 2026/02/16 17:29:35 by mattcarniel      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,17 @@
  * @param x horizontal coordinates
  * @param y vertical coordinates
  * @param c Color
- * @param data Image pointer
+ * @param image Image pointer
  */
-void	set_pixel( uint32_t x, uint32_t y, uint32_t color, t_data *data)
+void	set_pixel(uint32_t x, uint32_t y, uint32_t color, t_image *img)
 {
 	char	*dst;
 
-	if (!data || x >= data->pxl_w || y >= data->pxl_h)
+	if (!img || x >= img->pxl_w || y >= img->pxl_h)
 		return ;
 	if (color > 0xFFFFFF)
 		color = 0xFFFFFF;
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pxl / 8));
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pxl / 8));
 	*(unsigned int *)dst = color;
 }
 
@@ -40,15 +40,15 @@ void	set_pixel( uint32_t x, uint32_t y, uint32_t color, t_data *data)
  * @param x horizontal coordinates
  * @param y vertical coordinates
  * @param c Color
- * @param data Image pointer
+ * @param img Image pointer
  */
-void	add_pixel(uint32_t x, uint32_t y, unsigned int color, t_data *data)
+void	add_pixel(uint32_t x, uint32_t y, unsigned int color, t_image *img)
 {
 	char	*dst;
 
-	if (!data || x >= data->pxl_w || y >= data->pxl_h || y < 0)
+	if (!img || x >= img->pxl_w || y >= img->pxl_h || y < 0)
 		return ;
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pxl / 8));
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pxl / 8));
 	color += *(unsigned int *)dst;
 	if (color > 0xFFFFFF)
 		color = 0xFFFFFF;
@@ -60,23 +60,23 @@ void	add_pixel(uint32_t x, uint32_t y, unsigned int color, t_data *data)
  *
  * @param x horizontal coordinates
  * @param y vertical coordinates
- * @param data Image pointer
+ * @param img Image pointer
  * @return Color value of the pixel.
  */
-unsigned int	get_pixel(uint32_t x, uint32_t y, t_data *data)
+uint32_t	get_pixel(uint32_t x, uint32_t y, t_image *img)
 {
 	char	*src;
 
-	if (!data || x >= data->pxl_w || x < 0 || y >= data->pxl_h || y < 0)
+	if (!img || x >= img->pxl_w || x < 0 || y >= img->pxl_h || y < 0)
 		return (0);
-	src = data->addr + y * data->line_length + x * (data->bits_per_pxl / 8);
-	return (*(unsigned int *)src);
+	src = img->addr + y * img->line_length + x * (img->bits_per_pxl / 8);
+	return (*(uint32_t *)src);
 }
 
 /** 
- * @brief Scales a pixel by a given factor and sets the color value to the scaled area.
+ * @brief Scales a pixel by a given factor and color values.
  */
-void	scale_pixel(uint32_t x, uint32_t y, uint32_t color, int scale, t_data *dst)
+void	scale_pixel(uint32_t x, uint32_t y, uint32_t c, int scale, t_image *dst)
 {
 	uint32_t	i;
 	uint32_t	j;
@@ -89,25 +89,25 @@ void	scale_pixel(uint32_t x, uint32_t y, uint32_t color, int scale, t_data *dst)
 		i = x;
 		while (i < x + scale)
 		{
-			set_pixel(i, j, color, dst);
+			set_pixel(i, j, c, dst);
 			i++;
 		}
 		j++;
 	}
 }
 
-unsigned int	blend_colors(uint32_t src, uint32_t dst, float t)
+uint32_t	blend_colors(uint32_t src_c, uint32_t dst_c, float t)
 {
 	int	r;
 	int	g;
 	int	b;
 
 	if (t < 0)
-		return (src);
+		return (src_c);
 	if (t > 1)
-		return (dst);
-	r = ((1 - t) * ((src >> 16) & 0xFF)) + (t * ((dst >> 16) & 0xFF));
-	g = ((1 - t) * ((src >> 8) & 0xFF)) + (t * ((dst >> 8) & 0xFF));
-	b = ((1 - t) * (src & 0xFF)) + (t * (dst & 0xFF));
+		return (dst_c);
+	r = ((1 - t) * ((src_c >> 16) & 0xFF)) + (t * ((dst_c >> 16) & 0xFF));
+	g = ((1 - t) * ((src_c >> 8) & 0xFF)) + (t * ((dst_c >> 8) & 0xFF));
+	b = ((1 - t) * (src_c & 0xFF)) + (t * (dst_c & 0xFF));
 	return (r << 16 | g << 8 | b);
 }

@@ -6,7 +6,7 @@
 /*   By: mattcarniel <mattcarniel@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/09 18:02:10 by mattcarniel       #+#    #+#             */
-/*   Updated: 2026/02/09 18:14:28 by mattcarniel      ###   ########.fr       */
+/*   Updated: 2026/02/16 17:29:43 by mattcarniel      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
  *
  * @param img Image
  */
-void	clear_image(t_data *img)
+void	clear_image(t_image *img)
 {
 	if (img)
 		memset(img->addr, 0, img->pxl_w * img->pxl_h * (img->bits_per_pxl / 8));
@@ -33,14 +33,14 @@ void	clear_image(t_data *img)
  * @param mlx MLX pointer
  * @param img Image
  */
-void	free_image(void *mlx, t_data *data)
+void	free_image(void *mlx, t_image *img)
 {
-	if (!data)
+	if (!img)
 		return ;
-	if (mlx && data->img)
-		mlx_destroy_image(mlx, data->img);
-	free(data);
-	data = NULL;
+	if (mlx && img->data)
+		mlx_destroy_image(mlx, img->data);
+	free(img);
+	img = NULL;
 }
 
 /**
@@ -51,26 +51,26 @@ void	free_image(void *mlx, t_data *data)
  * @param height Height of image
  * @return A pointer to the new image.
  */
-t_data	*make_blank_image(void *mlx, int width, int height)
+t_image	*make_blank_image(void *mlx, int width, int height)
 {
-	t_data	*data;
+	t_image	*img;
 
 	if (!mlx)
 		return (NULL);
-	data = (t_data *)malloc(sizeof(t_data));
-	if (!data)
+	img = (t_image *)malloc(sizeof(t_image));
+	if (!img)
 		return (NULL);
-	data->img = mlx_new_image(mlx, width, height);
-	if (!data->img)
+	img->data = mlx_new_image(mlx, width, height);
+	if (!img->data)
 		return (free(data), NULL);
-	data->addr = mlx_get_data_addr(data->img,
-			&data->bits_per_pxl, &data->line_length, &data->endian);
-	if (!data->addr)
-		return (free_image(mlx, data), NULL);
-	data->pxl_w = width;
-	data->pxl_h = height;
-	clear_image(data);
-	return (data);
+	img->addr = mlx_get_data_addr(img->data,
+			&img->bits_per_pxl, &img->line_length, &img->endian);
+	if (!img->addr)
+		return (free_image(mlx, img), NULL);
+	img->pxl_w = width;
+	img->pxl_h = height;
+	clear_image(img);
+	return (img);
 }
 
 /**
@@ -80,21 +80,21 @@ t_data	*make_blank_image(void *mlx, int width, int height)
  * @param file Filename
  *@return A pointer to the new image.
  */
-t_data	*get_image_from_xpm(void *mlx, char *file)
+t_image	*get_image_from_xpm(void *mlx, char *file)
 {
-	t_data	*data;
+	t_image	*img;
 
 	if (!mlx || !file)
 		return (NULL);
-	data = (t_data *)malloc(sizeof(t_data));
-	if (!data)
+	img = (t_image *)malloc(sizeof(t_image));
+	if (!img)
 		return (NULL);
-	data->img = mlx_xpm_file_to_image(mlx, file, &data->pxl_w, &data->pxl_h);
-	if (!data->img)
-		return (free(data), NULL);
-	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pxl,
-			&data->line_length, &data->endian);
-	if (!data->addr)
-		return (free_image(mlx, data), NULL);
-	return (data);
+	img->data = mlx_xpm_file_to_image(mlx, file, &img->pxl_w, &img->pxl_h);
+	if (!img->data)
+		return (free(img), NULL);
+	img->addr = mlx_get_data_addr(img->data, &img->bits_per_pxl,
+			&img->line_length, &img->endian);
+	if (!img->addr)
+		return (free_image(mlx, img), NULL);
+	return (img);
 }

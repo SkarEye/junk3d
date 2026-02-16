@@ -6,7 +6,7 @@
 /*   By: mattcarniel <mattcarniel@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/21 18:37:02 by fadzejli          #+#    #+#             */
-/*   Updated: 2026/02/16 15:29:30 by mattcarniel      ###   ########.fr       */
+/*   Updated: 2026/02/16 17:19:53 by mattcarniel      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,6 @@ int	main(int argc, char **argv)
 
 	//parsing
 	{
-	if (argc < 2 )
-		return (print_error(loc(F, L), ERR_NO_ARGS, 1));
-	else if (argc > 2)
-		return (print_error(loc(F, L), ERR_MANY_ARGS, 1));
-	if (!is_valid_name(argv[1]))
-		return (print_error(loc(F, L), ERR_INVALID_NAME, 1));
-	game.file = map_file(argv[1]);
-	if (!game.file) // how to this check ?
-		return (print_error(loc(F, L), ERR_PERROR, errno));
-	status = parse_file(&game);
-	if (status)
-		return (free_game(&game), status);
 	}
 	//initialize game
 	{
